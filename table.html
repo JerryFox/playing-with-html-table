@@ -1,0 +1,63 @@
+<html>
+<head>
+<script src="webui.js"></script>
+
+<style>
+
+table, th, td {
+  border: 1px solid black;
+}
+
+td, th {
+  width: 60px;
+  text-align: center;
+  font-size: 24px;
+}
+
+tr {
+  height: 60px; 
+}
+
+tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd){
+  background-color: #D6EEEE;
+}
+
+</style>
+
+</head>
+<body>
+<table id="position">
+  <tr>
+    <td>TL</td>
+    <td>TC</td>
+    <td>TR</td>
+  </tr>
+  <tr>
+    <td>CL</td>
+    <td>CC</td>
+    <td>CR</td>
+  </tr>
+  <tr>
+    <td>BL</td>
+    <td>BC</td>
+    <td>BR</td>
+  </tr>
+</table>
+</br></br>
+<p id="output">output</p>
+
+<script>
+const tbody = document.querySelector('#position tbody');
+tbody.addEventListener('click', function (e) {
+  const cell = e.target.closest('td');
+  if (!cell) {return;} // Quit, not clicked on a cell
+  const row = cell.parentElement;
+  console.log(cell.innerHTML, row.rowIndex, cell.cellIndex);
+  document.getElementById("output").innerHTML = cell.innerHTML + "  " 
+	+ row.rowIndex.toString() + " " + cell.cellIndex.toString();
+});
+console.log("hejhola");
+console.log("ahoj");
+</script>
+</body>
+</html>
