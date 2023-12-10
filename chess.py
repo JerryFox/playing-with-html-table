@@ -1,3 +1,6 @@
+from webui import webui
+from jinja2 import Template
+
 # chess pieces - unicode characters
 # https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode
 chess_pieces = '♔♕♖♗♘♙♚♛♜♝♞♟'
@@ -99,4 +102,66 @@ chessboard_colors = [
     for icol in range(8)] for irow in range(8)]
 
 
+css = """
+table, th, td {
+  border: 1px solid black;
+}
 
+td, th {
+  width: 40px;
+  text-align: center;
+  font-size: 34px;
+}
+
+tr {
+  height: 40px; 
+}
+
+tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd){
+  background-color: #D6EEEE;
+}
+"""
+
+template = """
+<html>
+<head>
+<meta charset="UTF-8">
+
+<script src="webui.js"></script>
+
+<style>
+{{css}}
+</style>
+
+</head>
+<body>
+
+<TABLE id="position">
+{% for row in chessboard %}
+<TR>
+  {% for col in row %}<TD>{{col}}</TD>{% endfor %}
+</TR
+>{% endfor %}
+</TABLE>
+
+</br></br>
+<p id="output">output</p>
+
+<script>
+const tbody = document.querySelector('#position tbody');
+tbody.addEventListener('click', function (e) {
+  const cell = e.target.closest('td');
+  if (!cell) {return;} // Quit, not clicked on a cell
+  const row = cell.parentElement;
+  document.getElementById("output").innerHTML = cell.innerHTML + "  " 
+	+ row.rowIndex.toString() + " " + cell.cellIndex.toString();
+});
+</script>
+</body>
+</html>
+"""
+
+html = Template(template).render(chessboard=chessboard_sym, css=css)
+w = webui.window()
+w.show(html)
+webui.wait()
