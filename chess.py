@@ -104,22 +104,33 @@ chessboard_colors = [
 
 css = """
 table, th, td {
-  border: 1px solid black;
+  border: 2px solid gold;
 }
 
 td, th {
-  width: 40px;
+  width: 52px;
   text-align: center;
   font-size: 34px;
 }
 
 tr {
-  height: 40px; 
+  height: 52px; 
 }
 
 tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd){
   background-color: #D6EEEE;
 }
+
+td:hover:hover:hover:hover:hover {
+  //background-color: rgba(255, 255, 0, 0.5);
+  border: solid 2px red;
+
+}
+
+.selected.selected.selected.selected {
+  background-color: gold;
+}
+
 """
 
 template = """
@@ -153,8 +164,24 @@ tbody.addEventListener('click', function (e) {
   const cell = e.target.closest('td');
   if (!cell) {return;} // Quit, not clicked on a cell
   const row = cell.parentElement;
-  document.getElementById("output").innerHTML = cell.innerHTML + "  " 
-	+ row.rowIndex.toString() + " " + cell.cellIndex.toString();
+  document.getElementById("output").innerHTML = 
+    row.rowIndex.toString() + " " + cell.cellIndex.toString()
+    + "  " + (cell.innerHTML.trim() != "" ? cell.innerHTML : "free") + " " 
+    + cell.innerHTML.length.toString();
+  if (cell.classList.contains("selected")) 
+    cell.classList.remove("selected");
+  else 
+    cell.classList.add("selected");
+  // test for two .selected
+  selList = document.getElementsByClassName("selected");
+  if (selList.length > 1) {
+    //console.log("CHANGE SELECTED");
+    // change first two html
+    [selList[0].innerHTML, selList[1].innerHTML] = [selList[1].innerHTML, selList[0].innerHTML];
+    document.querySelectorAll('*').forEach((element) => {
+      element.classList.remove("selected");
+    });
+  } 
 });
 </script>
 </body>
