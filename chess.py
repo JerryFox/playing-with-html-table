@@ -1,5 +1,8 @@
-from webui import webui
-from jinja2 import Template
+# I want to use it in Brython too
+from sys import version
+if not "brython" in version.lower(): 
+    from webui import webui
+    from jinja2 import Template
 
 # chess pieces - unicode characters
 # https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode
@@ -136,59 +139,61 @@ td:hover:hover:hover:hover:hover {
 template = """
 <html>
 <head>
-<meta charset="UTF-8">
-
-<script src="webui.js"></script>
-
-<style>
-{{css}}
-</style>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="chessboard.css">
+  <script src="webui.js"></script>
+  <script>
+  function setListener() {
+    const tbody = document.querySelector('#position');
+    tbody.addEventListener('click', function (e) {
+      const cell = e.target.closest('td');
+      if (!cell) {return;} // Quit, not clicked on a cell
+      const row = cell.parentElement;
+      document.getElementById("output").innerHTML = 
+        row.rowIndex.toString() + " " + cell.cellIndex.toString()
+        + "  " + (cell.innerHTML.trim() != "" ? cell.innerHTML : "free") + " " 
+        + cell.innerHTML.length.toString();
+      if (cell.classList.contains("selected")) 
+        cell.classList.remove("selected");
+      else 
+        cell.classList.add("selected");
+      // test for two .selected
+      selList = document.getElementsByClassName("selected");
+      if (selList.length > 1) {
+        //console.log("CHANGE SELECTED");
+        // change first two html
+        [selList[0].innerHTML, selList[1].innerHTML] = [selList[1].innerHTML, selList[0].innerHTML];
+        document.querySelectorAll('*').forEach((element) => {
+          element.classList.remove("selected");
+        });
+      } 
+    });
+  }
+  </script>
 
 </head>
 <body>
+  <TABLE id="position">
+  {% for row in chessboard %}
+  <TR>
+    {% for col in row %}<TD>{{col}}</TD>{% endfor %}
+  </TR
+  >{% endfor %}
+  </TABLE>
 
-<TABLE id="position">
-{% for row in chessboard %}
-<TR>
-  {% for col in row %}<TD>{{col}}</TD>{% endfor %}
-</TR
->{% endfor %}
-</TABLE>
+  </br></br>
+  <p id="output">output</p>
 
-</br></br>
-<p id="output">output</p>
+  <script>
+  setListener();
+  </script>
 
-<script>
-const tbody = document.querySelector('#position tbody');
-tbody.addEventListener('click', function (e) {
-  const cell = e.target.closest('td');
-  if (!cell) {return;} // Quit, not clicked on a cell
-  const row = cell.parentElement;
-  document.getElementById("output").innerHTML = 
-    row.rowIndex.toString() + " " + cell.cellIndex.toString()
-    + "  " + (cell.innerHTML.trim() != "" ? cell.innerHTML : "free") + " " 
-    + cell.innerHTML.length.toString();
-  if (cell.classList.contains("selected")) 
-    cell.classList.remove("selected");
-  else 
-    cell.classList.add("selected");
-  // test for two .selected
-  selList = document.getElementsByClassName("selected");
-  if (selList.length > 1) {
-    //console.log("CHANGE SELECTED");
-    // change first two html
-    [selList[0].innerHTML, selList[1].innerHTML] = [selList[1].innerHTML, selList[0].innerHTML];
-    document.querySelectorAll('*').forEach((element) => {
-      element.classList.remove("selected");
-    });
-  } 
-});
-</script>
 </body>
 </html>
 """
 
-html = Template(template).render(chessboard=chessboard_sym, css=css)
-w = webui.window()
-w.show(html)
-webui.wait()
+if __name__ == "__main__":
+   html = Template(template).render(chessboard=chessboard_sym)
+   w = webui.window()
+   w.show(html)
+   webui.wait()
