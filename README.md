@@ -31,3 +31,7 @@ It imports something from the actual folder ([chess.py](chess.py)).
 For direct opening in browser is web server needed.
 Or using webui is possible: 
 [webui_brython_chess.py](webui_brython_chess.py) 
+
+
+[brython_calculator.html](brython_calculator.html) - example from https://brython.info/static_tutorial/en/index.html
+
