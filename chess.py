@@ -104,38 +104,6 @@ chessboard_colors = [
     ["b" if (irow + icol) % 2 else "w"
     for icol in range(8)] for irow in range(8)]
 
-
-css = """
-table, th, td {
-  border: 2px solid gold;
-}
-
-td, th {
-  width: 52px;
-  text-align: center;
-  font-size: 34px;
-}
-
-tr {
-  height: 52px; 
-}
-
-tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd){
-  background-color: #D6EEEE;
-}
-
-td:hover:hover:hover:hover:hover {
-  //background-color: rgba(255, 255, 0, 0.5);
-  border: solid 2px red;
-
-}
-
-.selected.selected.selected.selected {
-  background-color: gold;
-}
-
-"""
-
 template = """
 <html>
 <head>
