@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <script src="webui.js"></script>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="chessboard.css">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.12.0/brython.min.js">
+    </script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.12.0/brython_stdlib.js">
+    </script>
+
+    <script>
+function setListener() {
+const tbody = document.querySelector('#position');
+tbody.addEventListener('click', function (e) {
+  const cell = e.target.closest('td');
+  if (!cell) {return;} // Quit, not clicked on a cell
+  const row = cell.parentElement;
+  document.getElementById("output").innerHTML = 
+    row.rowIndex.toString() + " " + cell.cellIndex.toString()
+    + "  " + (cell.innerHTML.trim() != "" ? cell.innerHTML : "free") + " " 
+    + cell.innerHTML.length.toString();
+  if (cell.classList.contains("selected")) 
+    cell.classList.remove("selected");
+  else 
+    cell.classList.add("selected");
+  // test for two .selected
+  selList = document.getElementsByClassName("selected");
+  if (selList.length > 1) {
+    //console.log("CHANGE SELECTED");
+    // change first two html
+    [selList[0].innerHTML, selList[1].innerHTML] = [selList[1].innerHTML, selList[0].innerHTML];
+    document.querySelectorAll('*').forEach((element) => {
+      element.classList.remove("selected");
+    });
+  } 
+});
+}
+    </script>
+</head>
+
+<body>
+
+<script type="text/python">
+from browser import document, window
+
+# output to console
+print("ahoj")
+for i in range(10): 
+  print(i)
+
+# chessboard.py has to be on http server 
+# in the same folder
+from chess import chessboard_sym as chessboard
+print(chessboard)
+
+elem = document.createElement("h1")
+elem.innerHTML = "Playing with Brython"
+document <= elem
+
+elem = document.createElement("h2")
+document <= elem
+elem <= "and with a table"
+
+elem = document.createElement("h3")
+document <= elem
+elem.innerHTML = "and with chess pieces"
+
+table = document.createElement("table")
+table.setAttribute("id", "position")
+document <= table
+for row in chessboard: 
+  r = document.createElement("tr")
+  table <= r
+  for col in row: 
+    c = document.createElement("td")
+    r <= c
+    c.innerHTML = col
+
+p = document.createElement("p")
+p.setAttribute("id", "output")
+document <= p 
+p <= "output"
+
+window.setListener() # call javascript function
+</script>
+</body>
+</html>
